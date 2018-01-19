@@ -39,5 +39,17 @@
 			
 			]
 		}, 
+		"Templates": {
+		"type": "array",
+			"metadata": {
+				"description": "Templates on git"
+			},
+			"value": [
+				{
+					"StorageAccount":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/StorageTemplate.json",
+					"Network":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/Network.json",
+				},
+			],
+		}
     }  
   }
