@@ -6,9 +6,11 @@
 			"type": "array",
 		},
 		"storageAccount": {
+			"type": "array",
 			"defaultValue": []
 		},
 		"Templates": {
+			"type": "array",
 			"defaultValue": []
 		},
 	},
