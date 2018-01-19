@@ -15,7 +15,6 @@
 			],
 		},
 		"Network": {
-			"type": "array",
 			"metadata": {
 				"description": "Virtual network configuration block"
 			},
@@ -39,7 +38,6 @@
 			]
 		}, 
 		"Templates": {
-			"type": "array",
 			"metadata": {
 				"description": "Templates on git"
 			},
