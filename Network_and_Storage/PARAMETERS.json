@@ -3,7 +3,6 @@
 	"contentVersion": "1.0.0.0",
 	"Parameters": {
 		"storageAccount": {
-			"type": "array",
 			"metadata": {
 				"description": "Storage Account"
 			},
