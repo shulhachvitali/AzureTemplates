@@ -3,6 +3,7 @@
 	"contentVersion": "1.0.0.0",
 	"Parameters": {
 		"storageAccount": {
+			"type": "array",
 			"metadata": {
 				"description": "Storage Account"
 			},
@@ -15,6 +16,7 @@
 			],
 		},
 		"Network": {
+			"type": "array",
 			"metadata": {
 				"description": "Virtual network configuration block"
 			},
@@ -38,6 +40,7 @@
 			]
 		}, 
 		"Templates": {
+			"type": "array",
 			"metadata": {
 				"description": "Templates on git"
 			},
