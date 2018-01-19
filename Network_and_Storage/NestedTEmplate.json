@@ -1,0 +1,51 @@
+  {
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+		"Network": {
+		    "type": "array",
+			"defaultValue": []
+		},
+		"storageAccount": {
+		    "type": "array",
+			"defaultValue": []
+		},
+	},
+  
+	"variables": {
+		"ResourcesLocation": "[resourceGroup().location]",
+		"NetworkName": "[concat (resourceGroup().name,'_',parameters('Network')[0].VirtualNetworkName)]",
+		"FrontSubnetName": "[concat (resourceGroup().name,'_',parameters('Network')[1].Subnet1Name)]",
+		"BackSubnetName": "[concat (resourceGroup().name,'_',parameters('Network')[2].Subnet2Name)]",
+    },
+
+	"resources": [
+		{
+			"name": "[variables('NetworkName')]",
+			"type": "Microsoft.Network/virtualNetworks",
+			"apiVersion": "2017-10-01",
+			"location": "[variables('ResourcesLocation')]",
+			"properties": {
+				"addressSpace": {
+					"addressPrefixes": [
+						"[parameters('Network')[0].AddressPrefix]"
+					]
+				},
+			"subnets": [
+				{
+					"name": "[variables('FrontSubnetName')]",
+					"properties": {
+						"addressPrefix": "[parameters('Network')[1].AddressPrefix]"
+					}
+				},
+				{
+					"name": "[variables('BackSubnetName')]",
+					"properties": {
+						"addressPrefix": "[parameters('Network')[2].AddressPrefix]"
+					}
+				}
+			],
+			},
+		}
+	]
+}

@@ -1,0 +1,43 @@
+{
+	"$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"Parameters": {
+		"storageAccount": {
+		    "type": "array",
+			"metadata": {
+				"description": "Storage Account"
+			},
+			"value": [
+				{
+					"name":"storageaccount",
+					"sku":"Standard_LRS",
+					"kind":"storage"
+				},
+			],
+		},
+		"Network": {
+		    "type": "array",
+			"metadata": {
+				"description": "Virtual network configuration block"
+			},
+			"Value": [
+				{
+					"Description":"Virtual network base block, block number - 0",
+					"VirtualNetworkName":"MainNetwork",
+					"AddressPrefix":"10.1.0.0/16",
+				},
+				{
+					"Description":"Virtual subnet 1, block number - 1",
+					"Subnet1Name":"SubnetFrontend",
+					"AddressPrefix":"10.1.0.0/24",
+				},
+				{
+					"Description":"Virtual subnet 2, block number - 2",
+					"Subnet2Name":"SubnetBackend",
+					"AddressPrefix":"10.2.0.0/24",
+				},
+			
+			]
+		}, 
+    }  
+  }

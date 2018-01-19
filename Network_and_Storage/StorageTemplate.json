@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+		"Network": {
+		    "type": "array",
+			"defaultValue": []
+		},
+		"storageAccount": {
+		    "type": "array",
+			"defaultValue": []
+		},
+	},
+	"variables": {
+		"ResourcesLocation": "[resourceGroup().location]",
+		"storageName": "[concat('task3',parameters('storageAccount')[0].name)]"
+    },
+	"resources": [
+		{
+			"name": "[variables('storageName')]",
+			"type": "Microsoft.Storage/storageAccounts",
+			"apiVersion": "2017-06-01",
+			"sku": {
+				"name": "[parameters('storageAccount')[0].sku]",				
+			},
+			"kind": "[parameters('storageAccount')[0].kind]",
+			"location": "[variables('ResourcesLocation')]",
+			"tags": {},
+			"identity": {
+				"type": "SystemAssigned"
+			},
+			"properties": {}
+		},
+	],
+}
+	
