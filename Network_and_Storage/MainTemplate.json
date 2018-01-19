@@ -17,6 +17,9 @@
 	},
 	"variables": {
 		"ResourcesLocation": "[resourceGroup().location]",
+		"Params": "https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/PARAMETERS.json",
+		"StorageAccountL":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/StorageTemplate.json",
+		"NetworkL":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/Network.json"
     },
 	"resources": [
 		{
@@ -26,13 +29,13 @@
 			"properties": {
 			"mode": "incremental",
 			"templateLink": {
-				"uri":"[parameters('Templates')[0].StorageAccount]",
+				"uri":"[variables('StorageAccountL')]",
 				"contentVersion":"1.0.0.0"
 			},
 			"parametersLink": {
-			"uri":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/PARAMETERS.json",
-			"contentVersion":"1.0.0.0"
-       }
+			"uri": "[variables('Params')]",
+			"contentVersion": "1.0.0.0"
+			},
 			},
 		
 		},
@@ -43,13 +46,13 @@
 			"properties": {
 			"mode": "incremental",
 			"templateLink": {
-				"uri":"[parameters('Templates')[0].Network]",
+				"uri":"[variables('NetworkL')]",
 				"contentVersion":"1.0.0.0"
 			},
 			"parametersLink": {
-			"uri":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/PARAMETERS.json",
-			"contentVersion":"1.0.0.0"
-       }
+			"uri": "[variables('Params')]",
+			"contentVersion": "1.0.0.0"
+			},
 			},
 		
 		},
