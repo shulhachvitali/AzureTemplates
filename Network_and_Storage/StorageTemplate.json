@@ -3,12 +3,15 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
 		"Network": {
+			"type": "array",
 			"defaultValue": []
 		},
 		"storageAccount": {
+			"type": "array",
 			"defaultValue": []
 		},
 		"Templates": {
+			"type": "array",
 			"defaultValue": []
 		},
 	},
