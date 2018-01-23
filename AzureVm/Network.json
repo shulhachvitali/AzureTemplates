@@ -26,7 +26,8 @@
 		"FrontSubnetName": "[concat (resourceGroup().name,'_',parameters('Network')[1].Subnet1Name)]",
 		"BackSubnetName": "[concat (resourceGroup().name,'_',parameters('Network')[2].Subnet2Name)]",
 		"IpAddressName": "[concat (resourceGroup().name,'_',parameters('Network')[3].pubIPname)]",
-		"subnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks',(variables('NetworkName'),'/subnets/',(variables('FrontSubnetName'))]",
+		"vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('NetworkName'))]", 
+		"subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('FrontSubnetName'))]",
     },
 
 	"resources": [
