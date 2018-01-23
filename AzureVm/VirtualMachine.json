@@ -55,7 +55,7 @@
 				"networkProfile": {
 					"networkInterfaces": [
 						{
-							"id": "[resourceId('Microsoft.Network/networkInterfaces',[parameters('Network')[3].NicName])]"
+							"id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('Network')[3].NicName)]"
 						}
 					]
 				}
