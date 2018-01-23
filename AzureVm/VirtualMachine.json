@@ -1,0 +1,65 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+	    "adminUsername": { "type": "string" },
+		"adminPassword": { "type": "securestring" },
+		"Network": {
+			"type": "array",
+		},
+		"storageAccount": {
+			"type": "array",
+			"defaultValue": []
+		},
+		"VirtualMachine": {
+			"type": "array",
+			"defaultValue": []
+		},
+		"Templates": {
+			"type": "array",
+			"defaultValue": []
+		},
+	},
+	"variables": {
+	},
+	"resources": [    
+		{
+			"apiVersion": "2016-04-30-preview",
+			"type": "Microsoft.Compute/virtualMachines",
+			"name": "[parameters('VirtualMachine')[0].name]",
+			"location": "[resourceGroup().location]",
+			"dependsOn": [
+			],
+			"properties": {
+				"hardwareProfile": { 
+					"vmSize": "[parameters('VirtualMachine')[0].size]" 
+				},
+			"osProfile": {
+				"computerName": "[parameters('VirtualMachine')[0].name]",
+				"adminUsername": "[parameters('adminUsername')]",
+				"adminPassword": "[parameters('adminPassword')]"
+			},
+			"storageProfile": {
+				"imageReference": {
+					"publisher": "MicrosoftWindowsServer",
+					"offer": "WindowsServer",
+					"sku": "[parameters('VirtualMachine')[0].sku]",
+					"version": "latest"
+				},
+				"osDisk": {
+					"name": "myManagedOSDisk",
+					"caching": "ReadWrite",
+					"createOption": "FromImage"
+				}
+			},
+				"networkProfile": {
+					"networkInterfaces": [
+						{
+							"id": "[resourceId('Microsoft.Network/networkInterfaces',[parameters('Network')[3].NicName])]"
+						}
+					]
+				}
+			}
+		}
+	]
+}
