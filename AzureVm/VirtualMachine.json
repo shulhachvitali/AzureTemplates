@@ -80,6 +80,7 @@
               "autoUpgradeMinorVersion": true,
               "settings": {
                 //"script": "[parameters('VirtualMachine')[0].DSCModuleUrl]",
+				"ModulesUrl": "[parameters('VirtualMachine')[0].DSCModuleUrl]",
                 "ConfigurationFunction": "[parameters('VirtualMachine')[0].functionName]",
                 "Properties": {
                   "MachineName": "[parameters('VirtualMachine')[0].name]"
