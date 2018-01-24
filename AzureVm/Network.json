@@ -6,6 +6,9 @@
 			"type": "array",
 			"defaultValue": []
 		},
+		"Creds": {
+			"type": "array",
+		},
 		"storageAccount": {
 			"type": "array",
 			"defaultValue": []

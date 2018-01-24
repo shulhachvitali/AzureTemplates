@@ -5,6 +5,9 @@
 		"Network": {
 			"type": "array",
 		},
+		"Creds": {
+			"type": "array",
+		},
 		"storageAccount": {
 			"type": "array",
 			"defaultValue": []
