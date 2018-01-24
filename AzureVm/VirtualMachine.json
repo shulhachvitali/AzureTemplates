@@ -2,9 +2,10 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-	    "adminUsername": { "type": "string" },
-		"adminPassword": { "type": "securestring" },
 		"Network": {
+			"type": "array",
+		},
+		"Creds": {
 			"type": "array",
 		},
 		"storageAccount": {
@@ -36,8 +37,8 @@
 				},
 			"osProfile": {
 				"computerName": "[parameters('VirtualMachine')[0].name]",
-				"adminUsername": "[parameters('adminUsername')]",
-				"adminPassword": "[parameters('adminPassword')]"
+				"adminUsername": "[parameters('Creds')[0].name]",
+				"adminPassword": "[parameters('Creds')[0].pass]"
 			},
 			"storageProfile": {
 				"imageReference": {
