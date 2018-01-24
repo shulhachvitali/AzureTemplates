@@ -79,7 +79,7 @@
               "typeHandlerVersion": "2.19",
               "autoUpgradeMinorVersion": true,
               "settings": {
-                "ModulesUrl": "[parameters('VirtualMachine')[0].DSCModuleUrl]",
+                "script": "[parameters('VirtualMachine')[0].DSCModuleUrl]",
                 "ConfigurationFunction": "[parameters('VirtualMachine')[0].functionName]",
                 "Properties": {
                   "MachineName": "[parameters('VirtualMachine')[0].name]"
