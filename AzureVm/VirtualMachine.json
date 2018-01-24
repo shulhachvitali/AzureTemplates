@@ -81,6 +81,7 @@
               "settings": {
                 //"script": "[parameters('VirtualMachine')[0].DSCModuleUrl]",
 				"ModulesUrl": "[parameters('VirtualMachine')[0].DSCModuleUrl]",
+				"SasToken":"[parameters('VirtualMachine')[0].SASTOCKEN]",
                 "ConfigurationFunction": "[parameters('VirtualMachine')[0].functionName]",
                 "Properties": {
                   "MachineName": "[parameters('VirtualMachine')[0].name]"
