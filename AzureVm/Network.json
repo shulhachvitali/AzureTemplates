@@ -38,6 +38,9 @@
 			"name": "[variables('NetworkName')]",
 			"type": "Microsoft.Network/virtualNetworks",
 			"apiVersion": "2017-10-01",
+			"dependsOn": [
+				"[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('Network')[1].NSGNAME)]"
+			],
 			"location": "[variables('ResourcesLocation')]",
 			"properties": {
 				"addressSpace": {
@@ -49,13 +52,16 @@
 				{
 					"name": "[variables('FrontSubnetName')]",
 					"properties": {
-						"addressPrefix": "[parameters('Network')[1].AddressPrefix]"
+						"addressPrefix": "[parameters('Network')[1].AddressPrefix]",
+						"networkSecurityGroup": {
+							"id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('Network')[1].NSGNAME)]"
+						}
 					}
 				},
 				{
 					"name": "[variables('BackSubnetName')]",
 					"properties": {
-						"addressPrefix": "[parameters('Network')[2].AddressPrefix]"
+						"addressPrefix": "[parameters('Network')[2].AddressPrefix]",
 					}
 				}
 			],
@@ -73,6 +79,49 @@
 				}
 			}
 		},
+		//NSG
+		{
+			"apiVersion": "2017-03-01",
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"name": "[parameters('Network')[1].NSGNAME]",
+			"location": "[resourceGroup().location]",
+			"tags": {
+				"displayName": "NSG - Front End"
+			},
+			"properties": {
+				"securityRules": [
+					{
+						"name": "rdp-rule",
+						"properties": {
+							"description": "Allow RDP",
+							"protocol": "Tcp",
+							"sourcePortRange": "*",
+							"destinationPortRange": "3389",
+							"sourceAddressPrefix": "Internet",
+							"destinationAddressPrefix": "*",
+							"access": "Allow",
+							"priority": 100,
+							"direction": "Inbound"
+						}
+					},
+					{
+						"name": "web-rule",
+						"properties": {
+							"description": "Allow WEB",
+							"protocol": "Tcp",
+							"sourcePortRange": "*",
+							"destinationPortRange": "8080",
+							"sourceAddressPrefix": "Internet",
+							"destinationAddressPrefix": "*",
+							"access": "Allow",
+							"priority": 101,
+							"direction": "Inbound"
+						}
+					}
+				]
+			}
+        },
+		//NSG END
 		{
 			"apiVersion": "2016-03-30",
 			"type": "Microsoft.Network/networkInterfaces",
@@ -80,7 +129,8 @@
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
 				"[resourceId('Microsoft.Network/publicIPAddresses/', variables('IpAddressName'))]",
-				"[resourceId('Microsoft.Network/virtualNetworks/', variables('NetworkName'))]"
+				"[resourceId('Microsoft.Network/virtualNetworks/', variables('NetworkName'))]",
+				"[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('Network')[1].NSGNAME)]"
 			],
 			"properties": {
 				"ipConfigurations": [

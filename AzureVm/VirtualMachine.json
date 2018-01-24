@@ -23,7 +23,8 @@
 	},
 	"variables": {
 	},
-	"resources": [    
+	"resources": [   
+		// Virtual machine
 		{
 			"apiVersion": "2016-04-30-preview",
 			"type": "Microsoft.Compute/virtualMachines",
@@ -61,6 +62,32 @@
 					]
 				}
 			}
-		}
+		},
+		//VM end
+		//Extension start
+		{
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('VirtualMachine')[0].name,'/',parameters('VirtualMachine')[0].DSCNAME)]",
+            "apiVersion": "2017-12-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+				"[resourceId('Microsoft.Compute/virtualMachines/', parameters('VirtualMachine')[0].name)]"
+            ],
+            "properties": {
+              "publisher": "Microsoft.Powershell",
+              "type": "DSC",
+              "typeHandlerVersion": "2.19",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "ModulesUrl": "[parameters('VirtualMachine')[0].DSCModuleUrl]",
+                "ConfigurationFunction": "[parameters('VirtualMachine')[0].functionName]",
+                "Properties": {
+                  "MachineName": "[parameters('VirtualMachine')[0].name]"
+                }
+              },
+              "protectedSettings": null
+            }
+        }
+		//Extension end
 	]
 }
