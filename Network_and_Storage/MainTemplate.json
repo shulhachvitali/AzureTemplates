@@ -2,24 +2,14 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-		"Network": {
-		    "type": "array",
-			"defaultValue": []
-		},
-		"storageAccount": {
-		    "type": "array",
-			"defaultValue": []
-		},
-		"Templates": {
-		    "type": "array",
-			"defaultValue": []
-		},
+		"SecTemplate": {"Type": "String"},
 	},
 	"variables": {
 		"ResourcesLocation": "[resourceGroup().location]",
-		"Params": "https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/PARAMETERS.json",
-		"StorageAccountL":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/StorageTemplate.json",
-		"NetworkL":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/Network_and_Storage/Network.json"
+		"VML":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/AzureVm/VirtualMachine.json",
+		"Params": "https://github.com/shulhachvitali/AzureTemplates/blob/master/AzureVm/PARAMETERS.json",
+		"StorageAccountL":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/AzureVm/StorageTemplate.json",
+		"NetworkL":"https://raw.githubusercontent.com/shulhachvitali/AzureTemplates/master/AzureVm/Network.json"
     },
 	"resources": [
 		{
@@ -33,7 +23,7 @@
 				"contentVersion":"1.0.0.0"
 			},
 			"parametersLink": {
-			"uri": "[variables('Params')]",
+			"uri": "[parameters('SecTemplate')]",
 			"contentVersion": "1.0.0.0"
 			},
 			},
@@ -50,9 +40,34 @@
 				"contentVersion":"1.0.0.0"
 			},
 			"parametersLink": {
-			"uri": "[variables('Params')]",
+			"uri": "[parameters('SecTemplate')]",
 			"contentVersion": "1.0.0.0"
 			},
+			},
+		
+		},
+		{
+			"apiVersion": "2017-05-10",
+			"name": "VirtualMachine",
+			"type": "Microsoft.Resources/deployments",
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'Network')]",
+				"[resourceId('Microsoft.Resources/deployments', 'StorageAccount')]",
+			],
+			"properties": {
+			"mode": "incremental",
+			"templateLink": {
+				"uri":"[variables('VML')]",
+				"contentVersion":"1.0.0.0"
+			},
+			"parametersLink": {
+			"uri": "[parameters('SecTemplate')]",
+			"contentVersion": "1.0.0.0"
+			},
+			//"parameters": {
+			//	"adminUsername":{"value": "[parameters('adminUsername')]"},
+			//	"adminPassword":{"value": "[parameters('adminPassword')]"},
+			//}
 			},
 		
 		},
