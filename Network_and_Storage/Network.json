@@ -6,7 +6,14 @@
 			"type": "array",
 			"defaultValue": []
 		},
+		"Creds": {
+			"type": "array",
+		},
 		"storageAccount": {
+			"type": "array",
+			"defaultValue": []
+		},
+		"VirtualMachine": {
 			"type": "array",
 			"defaultValue": []
 		},
@@ -21,6 +28,9 @@
 		"NetworkName": "[concat (resourceGroup().name,'_',parameters('Network')[0].VirtualNetworkName)]",
 		"FrontSubnetName": "[concat (resourceGroup().name,'_',parameters('Network')[1].Subnet1Name)]",
 		"BackSubnetName": "[concat (resourceGroup().name,'_',parameters('Network')[2].Subnet2Name)]",
+		"IpAddressName": "[concat (resourceGroup().name,'_',parameters('Network')[3].pubIPname)]",
+		"vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('NetworkName'))]", 
+		"subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('FrontSubnetName'))]",
     },
 
 	"resources": [
@@ -28,6 +38,9 @@
 			"name": "[variables('NetworkName')]",
 			"type": "Microsoft.Network/virtualNetworks",
 			"apiVersion": "2017-10-01",
+			"dependsOn": [
+				"[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('Network')[1].NSGNAME)]"
+			],
 			"location": "[variables('ResourcesLocation')]",
 			"properties": {
 				"addressSpace": {
@@ -39,17 +52,102 @@
 				{
 					"name": "[variables('FrontSubnetName')]",
 					"properties": {
-						"addressPrefix": "[parameters('Network')[1].AddressPrefix]"
+						"addressPrefix": "[parameters('Network')[1].AddressPrefix]",
+						"networkSecurityGroup": {
+							"id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('Network')[1].NSGNAME)]"
+						}
 					}
 				},
 				{
 					"name": "[variables('BackSubnetName')]",
 					"properties": {
-						"addressPrefix": "[parameters('Network')[2].AddressPrefix]"
+						"addressPrefix": "[parameters('Network')[2].AddressPrefix]",
 					}
 				}
 			],
 			},
-		}
+		},
+		{
+			"apiVersion": "2016-03-30",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"name": "[variables('IpAddressName')]",
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"publicIPAllocationMethod": "[parameters('Network')[3].AllocationMethod]",
+				"dnsSettings": {
+					"domainNameLabel": "[parameters('Network')[3].DNSLabel]"
+				}
+			}
+		},
+		//NSG
+		{
+			"apiVersion": "2017-03-01",
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"name": "[parameters('Network')[1].NSGNAME]",
+			"location": "[resourceGroup().location]",
+			"tags": {
+				"displayName": "NSG - Front End"
+			},
+			"properties": {
+				"securityRules": [
+					{
+						"name": "rdp-rule",
+						"properties": {
+							"description": "Allow RDP",
+							"protocol": "Tcp",
+							"sourcePortRange": "*",
+							"destinationPortRange": "3389",
+							"sourceAddressPrefix": "Internet",
+							"destinationAddressPrefix": "*",
+							"access": "Allow",
+							"priority": 100,
+							"direction": "Inbound"
+						}
+					},
+					{
+						"name": "web-rule",
+						"properties": {
+							"description": "Allow WEB",
+							"protocol": "Tcp",
+							"sourcePortRange": "*",
+							"destinationPortRange": "8080",
+							"sourceAddressPrefix": "Internet",
+							"destinationAddressPrefix": "*",
+							"access": "Allow",
+							"priority": 101,
+							"direction": "Inbound"
+						}
+					}
+				]
+			}
+        },
+		//NSG END
+		{
+			"apiVersion": "2016-03-30",
+			"type": "Microsoft.Network/networkInterfaces",
+			"name": "[parameters('Network')[3].NicName]",
+			"location": "[resourceGroup().location]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Network/publicIPAddresses/', variables('IpAddressName'))]",
+				"[resourceId('Microsoft.Network/virtualNetworks/', variables('NetworkName'))]",
+				"[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('Network')[1].NSGNAME)]"
+			],
+			"properties": {
+				"ipConfigurations": [
+				{
+					"name": "[parameters('Network')[3].IpConfigurationName]",
+					"properties": {
+						"privateIPAllocationMethod": "[parameters('Network')[3].AllocationMethod]",
+						"publicIPAddress": { 
+							"id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('IpAddressName'))]" 
+							},
+						"subnet": {
+							"id": "[variables('subnetRef')]" 
+						}
+					}
+				}
+				]
+			}
+		},
 	]
 }

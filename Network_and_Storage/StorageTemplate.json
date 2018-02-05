@@ -5,7 +5,14 @@
 		"Network": {
 			"type": "array",
 		},
+		"Creds": {
+			"type": "array",
+		},
 		"storageAccount": {
+			"type": "array",
+			"defaultValue": []
+		},
+		"VirtualMachine": {
 			"type": "array",
 			"defaultValue": []
 		},
