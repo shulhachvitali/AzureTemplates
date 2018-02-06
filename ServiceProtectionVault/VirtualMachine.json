@@ -1,0 +1,98 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"Network": {
+			"type": "array",
+		},
+		"Creds": {
+			"type": "array",
+		},
+		"StorageVault": {
+			"type": "array",
+		},
+		"storageAccount": {
+			"type": "array",
+			"defaultValue": []
+		},
+		"VirtualMachine": {
+			"type": "array",
+			"defaultValue": []
+		},
+		"Templates": {
+			"type": "array",
+			"defaultValue": []
+		},
+	},
+	"variables": {
+	},
+	"resources": [   
+		// Virtual machine
+		{
+			"apiVersion": "2016-04-30-preview",
+			"type": "Microsoft.Compute/virtualMachines",
+			"name": "[parameters('VirtualMachine')[0].name]",
+			"location": "[resourceGroup().location]",
+			"dependsOn": [
+			],
+			"properties": {
+				"hardwareProfile": { 
+					"vmSize": "[parameters('VirtualMachine')[0].size]" 
+				},
+			"osProfile": {
+				"computerName": "[parameters('VirtualMachine')[0].name]",
+				"adminUsername": "[parameters('Creds')[0].name]",
+				"adminPassword": "[parameters('Creds')[0].pass]"
+			},
+			"storageProfile": {
+				"imageReference": {
+					"publisher": "MicrosoftWindowsServer",
+					"offer": "WindowsServer",
+					"sku": "[parameters('VirtualMachine')[0].sku]",
+					"version": "latest"
+				},
+				"osDisk": {
+					"name": "myManagedOSDisk",
+					"caching": "ReadWrite",
+					"createOption": "FromImage"
+				}
+			},
+				"networkProfile": {
+					"networkInterfaces": [
+						{
+							"id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('Network')[3].NicName)]"
+						}
+					]
+				}
+			}
+		},
+		//VM end
+		//Extension start
+		{
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('VirtualMachine')[0].name,'/',parameters('VirtualMachine')[0].DSCNAME)]",
+            "apiVersion": "2017-12-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+				"[resourceId('Microsoft.Compute/virtualMachines/', parameters('VirtualMachine')[0].name)]"
+            ],
+            "properties": {
+              "publisher": "Microsoft.Powershell",
+              "type": "DSC",
+              "typeHandlerVersion": "2.19",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                //"script": "[parameters('VirtualMachine')[0].DSCModuleUrl]",
+				"ModulesUrl": "[parameters('VirtualMachine')[0].DSCModuleUrl]",
+				//"SasToken":"[parameters('VirtualMachine')[0].SASTOCKEN]",
+                "ConfigurationFunction": "[parameters('VirtualMachine')[0].functionName]",
+                "Properties": {
+                  "MachineName": "[parameters('VirtualMachine')[0].name]"
+                }
+              },
+              "protectedSettings": null
+            }
+        }
+		//Extension end
+	]
+}
