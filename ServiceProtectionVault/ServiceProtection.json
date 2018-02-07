@@ -135,7 +135,7 @@
 				"workloadType": "VM",
 				"containerName": "[variables('v2VmContainer')]",
 				"sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('VirtualMachine')[0].name)]",
-				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,'DefaultPolicy']",
+				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,'DefaultPolicy')]",
 			}
 		}
 	]
