@@ -49,35 +49,35 @@
 			}
 		},
 		//Storage Vault Police
-		{
-			"name": "[concat(parameters('StorageVault')[0].name,'/',parameters('StorageVault')[0].policename)]",
-			"type": "Microsoft.RecoveryServices/vaults/backupPolicies",
-			"apiVersion": "2016-12-01",
-			"location": "[resourceGroup().location]",
-			"dependsOn": [
-				"[concat('Microsoft.RecoveryServices/vaults/', parameters('StorageVault')[0].name)]"
-			],
-"properties": {
-          "backupManagementType": "AzureIaasVM",
-          "schedulePolicy": {
-            "scheduleRunFrequency": "Daily",
-            "scheduleRunDays": null,
-            "scheduleRunTimes": "2018-02-07T14:18:02.00Z",
-            "schedulePolicyType": "SimpleSchedulePolicy"
-          },
-          "retentionPolicy": {
-            "dailySchedule": {
-              "retentionTimes": "2018-02-07T14:18:02.00Z",
-              "retentionDuration": {
-                  "count": "104",
-                  "durationType": "Days"
-              }
-            },
-            "retentionPolicyType": "LongTermRetentionPolicy"
-          },
-          "timeZone": "UTC"
-        }
-		},
+//		{
+//			"name": "[concat(parameters('StorageVault')[0].name,'/',parameters('StorageVault')[0].policename)]",
+//			"type": "Microsoft.RecoveryServices/vaults/backupPolicies",
+//			"apiVersion": "2016-12-01",
+//			"location": "[resourceGroup().location]",
+//			"dependsOn": [
+//				"[concat('Microsoft.RecoveryServices/vaults/', parameters('StorageVault')[0].name)]"
+//			],
+//"properties": {
+ //         "backupManagementType": "AzureIaasVM",
+  //        "schedulePolicy": {
+   //         "scheduleRunFrequency": "Daily",
+    //        "scheduleRunDays": null,
+     //       "scheduleRunTimes": "2018-02-07T14:18:02.00Z",
+      //      "schedulePolicyType": "SimpleSchedulePolicy"
+       //   },
+        //  "retentionPolicy": {
+         //   "dailySchedule": {
+          //    "retentionTimes": "2018-02-07T14:18:02.00Z",
+           //   "retentionDuration": {
+            //      "count": "104",
+             //     "durationType": "Days"
+              //}
+            //},
+    //        "retentionPolicyType": "LongTermRetentionPolicy"
+     //     },
+      //    "timeZone": "UTC"
+       // }
+		//},
 		//Storage Vault Protected Item
 		{
 			"name":"[concat(parameters('StorageVault')[0].name,'/',variables('backupFabric'),'/',variables('v2VmContainer'),'/',parameters('VirtualMachine')[0].name)]",
@@ -93,7 +93,7 @@
 				"workloadType": "VM",
 				"containerName": "[variables('v2VmContainer')]",
 				"sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('VirtualMachine')[0].name)]",
-				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,parameters('StorageVault')[0].policename)]",
+				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,DefaultPolicy]",
 			}
 		}
 	]
