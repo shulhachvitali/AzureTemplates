@@ -127,7 +127,7 @@
 			"apiVersion": "2016-12-01",
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
-				"[concat('Microsoft.RecoveryServices/vaults/',parameters('StorageVault')[0].name,'/backupPolicies/',parameters('StorageVault')[0].policename)]"
+				"[concat('Microsoft.RecoveryServices/vaults/', parameters('StorageVault')[0].name)]"
 			],
 			"properties": {
 				"protectedItemType": "[parameters('StorageVault')[0].protectedItemType]",
@@ -135,7 +135,7 @@
 				"workloadType": "VM",
 				"containerName": "[variables('v2VmContainer')]",
 				"sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('VirtualMachine')[0].name)]",
-				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,parameters('StorageVault')[0].policename)]",
+				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,'DefaultPolicy']",
 			}
 		}
 	]
