@@ -29,8 +29,8 @@
 	"variables": {
 		"backupFabric":"Azure",
 		"v2VmContainer":"iaasvmcontainer",
-		"PoliceName":"MyPolicyDaily"
-		//"PoliceName":"[concat(parameters('StorageVault')[0].name,'/',parameters('StorageVault')[0].policename)]"
+		//"PoliceName":"MyPolicyDaily"
+		"PoliceName":"[concat(parameters('StorageVault')[0].name,'/',parameters('StorageVault')[0].policename)]"
 		//'Microsoft.RecoveryServices/vaults/backupPolicies/storagevault1/policebackvm'
 		
 		
@@ -50,7 +50,7 @@
 		},
 		//Storage Vault Police
 		{
-			"name": "[variables('PoliceName')]",
+			"name": "[concat(parameters('StorageVault')[0].name,'/',parameters('StorageVault')[0].policename)]",
 			"type": "Microsoft.RecoveryServices/vaults/backupPolicies",
 			"apiVersion": "2016-12-01",
 			"location": "[resourceGroup().location]",
@@ -93,7 +93,7 @@
 				"workloadType": "VM",
 				"containerName": "[variables('v2VmContainer')]",
 				"sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('VirtualMachine')[0].name)]",
-				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,variables('PoliceName'))]",
+				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,parameters('StorageVault')[0].policename)]",
 			}
 		}
 	]
