@@ -48,7 +48,7 @@
 				"name": "Standard"
 			}
 		},
-		//Storage Vault Police
+		//Storage Vault Police/////////
 //		{
 //			"name": "[concat(parameters('StorageVault')[0].name,'/',parameters('StorageVault')[0].policename)]",
 //			"type": "Microsoft.RecoveryServices/vaults/backupPolicies",
@@ -58,27 +58,55 @@
 //				"[concat('Microsoft.RecoveryServices/vaults/', parameters('StorageVault')[0].name)]"
 //			],
 //"properties": {
- //         "backupManagementType": "AzureIaasVM",
-  //        "schedulePolicy": {
-   //         "scheduleRunFrequency": "Daily",
-    //        "scheduleRunDays": null,
-     //       "scheduleRunTimes": "2018-02-07T14:18:02.00Z",
-      //      "schedulePolicyType": "SimpleSchedulePolicy"
-       //   },
-        //  "retentionPolicy": {
-         //   "dailySchedule": {
-          //    "retentionTimes": "2018-02-07T14:18:02.00Z",
-           //   "retentionDuration": {
-            //      "count": "104",
-             //     "durationType": "Days"
-              //}
-            //},
-    //        "retentionPolicyType": "LongTermRetentionPolicy"
-     //     },
-      //    "timeZone": "UTC"
-       // }
-		//},
-		//Storage Vault Protected Item
+//          "backupManagementType": "AzureIaasVM",
+//          "schedulePolicy": {
+//            "scheduleRunFrequency": "Daily",
+//            "scheduleRunDays": null,
+//            "scheduleRunTimes": "2018-02-07T14:18:02.00Z",
+//            "schedulePolicyType": "SimpleSchedulePolicy"
+//          },
+ //         "retentionPolicy": {
+//            "dailySchedule": {
+//              "retentionTimes": "2018-02-07T14:18:02.00Z",
+//              "retentionDuration": {
+//                  "count": "104",
+//                  "durationType": "Days"
+//              }
+//            },
+//            "retentionPolicyType": "LongTermRetentionPolicy"
+//          },
+//          "timeZone": "UTC"
+//        }
+//		},
+		//////////////////////////////////////////
+		{
+			"apiVersion": "2016-06-01",
+			"name": "[concat(parameters('vaultName'), '/',parameters('StorageVault')[0].policename)]",
+			"type": "Microsoft.RecoveryServices/vaults/backupPolicies",
+			"dependsOn": [ "[concat('Microsoft.RecoveryServices/vaults/', parameters('StorageVault')[0].name)]" ],
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"backupManagementType": "AzureIaasVM",
+				"schedulePolicy": {
+					"scheduleRunFrequency": "Daily",
+					"scheduleRunDays": null,
+					"scheduleRunTimes": ["21:00"],
+					"schedulePolicyType": "SimpleSchedulePolicy"
+				},
+				"retentionPolicy": {
+					"dailySchedule": {
+						"retentionTimes": ["21:00"],
+						"retentionDuration": {
+							"count": 30,
+							"durationType": "Days"
+						}
+					},
+				"retentionPolicyType": "LongTermRetentionPolicy"
+				},
+				"timeZone": "UTC"
+			}
+		},
+		//Storage Vault Protected Item////////////
 		{
 			"name":"[concat(parameters('StorageVault')[0].name,'/',variables('backupFabric'),'/',variables('v2VmContainer'),'/',parameters('VirtualMachine')[0].name)]",
 			"type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
@@ -91,10 +119,26 @@
 				"protectedItemType": "[parameters('StorageVault')[0].protectedItemType]",
 				"backupManagementType": "AzureIaasVM",
 				"workloadType": "VM",
-				"containerName": "[variables('v2VmContainer')]",
+//				"containerName": "[variables('v2VmContainer')]",
 				"sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('VirtualMachine')[0].name)]",
-				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,'DefaultPolicy')]",
+				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('StorageVault')[0].name,parameters('StorageVault')[0].policename)]",
 			}
-		}
+		},
+		/////////////////////////////////////
+//		{
+//			"name": "[concat(parameters('vaultName'), '/', variables('backupFabric'), '/', variables('v2VmContainer'), concat(resourceGroup().name,';',parameters('VirtualMachine')[0].name), '/', variables('v2Vm'), concat(resourceGroup().name,';',parameters('vmName')))]",
+//			"apiVersion": "2016-06-01",
+//			"dependsOn": [
+//				"[concat('Microsoft.RecoveryServices/vaults/', parameters('vaultName'))]",
+//				"[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('vaultName'),parameters('policyName'))]"
+//			],
+//			"location": "[resourceGroup().location]",
+//			"type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+//			"properties": {
+//				"protectedItemType": "Microsoft.Compute/virtualMachines",
+//				"policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies',parameters('vaultName'),parameters('policyName'))]",
+//				"sourceResourceId": "[resourceId(subscription().subscriptionId,resourceGroup().name,'Microsoft.Compute/virtualMachines',parameters('vmName'))]"
+//			}
+//		}
 	]
 }
