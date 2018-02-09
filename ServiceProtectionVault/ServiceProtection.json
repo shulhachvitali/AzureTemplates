@@ -81,7 +81,7 @@
 		//////////////////////////////////////////
 		{
 			"apiVersion": "2016-06-01",
-			"name": "[concat(parameters('vaultName'), '/',parameters('StorageVault')[0].policename)]",
+			"name": "[concat(parameters('StorageVault')[0].name, '/',parameters('StorageVault')[0].policename)]",
 			"type": "Microsoft.RecoveryServices/vaults/backupPolicies",
 			"dependsOn": [ "[concat('Microsoft.RecoveryServices/vaults/', parameters('StorageVault')[0].name)]" ],
 			"location": "[resourceGroup().location]",
