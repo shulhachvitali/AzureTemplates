@@ -108,7 +108,8 @@
 		},
 		//Storage Vault Protected Item////////////
 		{
-			"name":"[concat(parameters('StorageVault')[0].name,'/',variables('backupFabric'),'/',variables('v2VmContainer'),'/',parameters('VirtualMachine')[0].name)]",
+			//"name":"[concat(parameters('StorageVault')[0].name,'/',variables('backupFabric'),'/',variables('v2VmContainer'),'/',parameters('VirtualMachine')[0].name)]",
+			"name": "[concat(parameters('StorageVault')[0].name, '/', variables('backupFabric'), '/', variables('v2VmContainer'), concat(resourceGroup().name,';',parameters('VirtualMachine')[0].name), '/', variables('v2VmContainer'), concat(resourceGroup().name,';',parameters('VirtualMachine')[0].name))]",
 			"type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
 			"apiVersion": "2016-12-01",
 			"location": "[resourceGroup().location]",
