@@ -28,7 +28,8 @@
   
 	"variables": {
 		"backupFabric":"Azure",
-		"v2VmContainer":"iaasvmcontainer",
+		"v2VmContainer": "iaasvmcontainer;iaasvmcontainerv2;",
+		"v2Vm": "vm;iaasvmcontainerv2;",
 		//"PoliceName":"MyPolicyDaily"
 		"PoliceName":"[concat(parameters('StorageVault')[0].name,'/',parameters('StorageVault')[0].policename)]"
 		//'Microsoft.RecoveryServices/vaults/backupPolicies/storagevault1/policebackvm'
@@ -109,7 +110,7 @@
 		//Storage Vault Protected Item////////////
 		{
 			//"name":"[concat(parameters('StorageVault')[0].name,'/',variables('backupFabric'),'/',variables('v2VmContainer'),'/',parameters('VirtualMachine')[0].name)]",
-			"name": "[concat(parameters('StorageVault')[0].name, '/', variables('backupFabric'), '/', variables('v2VmContainer'), concat(resourceGroup().name,';',parameters('VirtualMachine')[0].name), '/', variables('v2VmContainer'), concat(resourceGroup().name,';',parameters('VirtualMachine')[0].name))]",
+			"name": "[concat(parameters('StorageVault')[0].name, '/', variables('backupFabric'), '/', variables('v2VmContainer'), concat(resourceGroup().name,';',parameters('VirtualMachine')[0].name), '/', variables('v2Vm'), concat(resourceGroup().name,';',parameters('VirtualMachine')[0].name))]",
 			"type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
 			"apiVersion": "2016-12-01",
 			"location": "[resourceGroup().location]",
